@@ -92,8 +92,8 @@ def monitoring():
                     errors_description_list = list(set(errors_description_list + requests_list))
                     dict_total_request[request] += requests_list
     dataframe = pandas.DataFrame.from_dict(dict_total_request, orient='index').transpose()
-    total_dataframe = dataframe.groupby(LIST_REQUEST[0]).count()
-    total_dataframe.to_csv('logs_detallados.csv')
+    dataframe = dataframe.apply(pandas.Series.value_counts)
+    dataframe.to_csv('logs_detallados.csv')
 
 
 def main():

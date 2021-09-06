@@ -2,7 +2,7 @@ import re
 
 import pandas
 
-from util.common import decompress_logs, LOG_PATH_FOLDER, LIST_REQUEST, search_file, INCONCLUSIVE_TAG, ERRORS_TAG
+from util.common import *
 
 REQUEST_STATE = [ERRORS_TAG,
                  INCONCLUSIVE_TAG]
@@ -10,7 +10,14 @@ SEARCH_REGEX = {
     ERRORS_TAG: r'%s.*("codError":100|Index was out of range|Sequence contains no elements|En este momento el servicio no está disponible).*',
     INCONCLUSIVE_TAG: r'.*%s.*"Codigo":"01"(?!.*En este momento el servicio no está disponible).*"Mensaje":(".*")'
 }
-EXPORT_FILE_NAME = 'logs_estado_cmb'
+EXPORT_FILE_NAME = 'logs_detallados'
+
+
+def export_to_dataframe(dict_total_request):
+    dataframe = pandas.DataFrame.from_dict(dict_total_request, orient='index').transpose()
+    dataframe = dataframe.apply(pandas.Series.value_counts)
+    dataframe.to_csv(f'{EXPORT_FILE_NAME}.{CSV_EXTENSION}')
+    dataframe.to_excel(f'{EXPORT_FILE_NAME}.{EXCEL_EXTENSION}')
 
 
 def monitoring():
@@ -26,10 +33,7 @@ def monitoring():
                 for key, value in SEARCH_REGEX.items():
                     requests_list = re.findall(value % request, string_requests)
                     dict_total_request[request] += requests_list
-    dataframe = pandas.DataFrame.from_dict(dict_total_request, orient='index').transpose()
-    dataframe = dataframe.apply(pandas.Series.value_counts)
-    dataframe.to_csv('logs_detallados.csv')
-    dataframe.to_excel('logs_detallados.xlsx')
+    export_to_dataframe(dict_total_request)
 
 
 def main():

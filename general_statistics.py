@@ -2,8 +2,7 @@ import re
 
 import pandas
 
-from util.common import decompress_logs, LOG_PATH_FOLDER, STATE_TAG, LIST_REQUEST, \
-    search_file, TOTAL_TAG, APPROVED_TAG, ERRORS_TAG, INCONCLUSIVE_TAG
+from util.common import *
 
 REQUEST_STATE = [TOTAL_TAG,
                  APPROVED_TAG,
@@ -21,8 +20,8 @@ EXPORT_FILE_NAME = 'logs_estado_cmb'
 def export_to_dataframe(dict_total_request):
     data_frame_logs = pandas.DataFrame(data=dict_total_request)
     data_frame_logs.insert(0, STATE_TAG, REQUEST_STATE)
-    data_frame_logs.to_excel(f'{EXPORT_FILE_NAME}.xlsx', index=False)
-    data_frame_logs.to_csv(f'{EXPORT_FILE_NAME}.csv', index=False)
+    data_frame_logs.to_csv(f'{EXPORT_FILE_NAME}.{CSV_EXTENSION}', index=False)
+    data_frame_logs.to_excel(f'{EXPORT_FILE_NAME}.{EXCEL_EXTENSION}', index=False)
 
 
 def monitoring():

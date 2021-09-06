@@ -78,7 +78,7 @@ def decompress_logs(path):
 
 def monitoring():
     dict_total_request = dict.fromkeys(LIST_REQUEST)
-    total_dataframe = pandas.DataFrame()
+    errors_description_list = []
     for folder in search_file(f'{LOG_PATH_FOLDER}'):
         for log in search_file(folder):
             file_log = open(log, encoding='utf-8').read()
@@ -89,11 +89,11 @@ def monitoring():
                 string_requests = '\n'.join(list_requests)
                 for key, value in SEARCH_REGEX.items():
                     requests_list = re.findall(value % request, string_requests)
-                    dataframe = pandas.DataFrame(data={request: requests_list})
-                    total_dataframe = total_dataframe.merge(dataframe)
+                    errors_description_list = list(set(errors_description_list + requests_list))
                     dict_total_request[request] += requests_list
-    dataframe = total_dataframe.value_counts()
-    dataframe.to_csv('logs_detallados.csv')
+    dataframe = pandas.DataFrame.from_dict(dict_total_request, orient='index').transpose()
+    total_dataframe = dataframe.groupby(LIST_REQUEST[0]).count()
+    total_dataframe.to_csv('logs_detallados.csv')
 
 
 def main():

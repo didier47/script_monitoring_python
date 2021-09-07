@@ -26,6 +26,7 @@ TOTAL_TAG = 'total'
 APPROVED_TAG = 'aprobadas'
 ERRORS_TAG = 'errores'
 INCONCLUSIVE_TAG = 'inconclusas'
+NO_RESPONSE_TAG = 'sinRespuesta'
 
 
 def search_file(path):

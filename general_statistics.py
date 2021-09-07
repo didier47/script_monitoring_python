@@ -28,7 +28,10 @@ def monitoring():
     dict_total_request = dict.fromkeys(LIST_REQUEST)
     for folder in search_file(f'{LOG_PATH_FOLDER}'):
         for log in search_file(folder):
-            file_log = open(log, encoding='utf-8').read()
+            try:
+                file_log = open(log, encoding='utf-8').read()
+            except:
+                print(f'Error descomprimiendo carpeta: {folder}')
             for request in LIST_REQUEST:
                 list_requests = re.findall(r'%s..{.*' % request, file_log)
                 string_requests = '\n'.join(list_requests)

@@ -45,19 +45,21 @@ def decompress_gz_file(file_path, destination_file_path):
 
 
 def split_file_extension(path):
-    list_path_split = path.split('.')
-    file_extension = list_path_split.pop(-1)
-    file_path_with_no_extension = '.'.join(list_path_split)
+    list_path_split = os.path.splitext(path)
+    file_extension = list_path_split[1].replace('.', '')
+    file_path_with_no_extension = list_path_split[0]
     return file_path_with_no_extension, file_extension
 
 
 def decompress_logs(path):
     for file in search_file(path):
         file_path_with_not_extension, file_extension = split_file_extension(file)
-        if file_extension == TAR_EXTENSION and not os.path.exists(file_path_with_not_extension):
+        if file_extension == TAR_EXTENSION:
             decompress_tar_file(file)
             decompress_logs(file_path_with_not_extension)
         elif file_extension == GZ_EXTENSION:
             decompress_gz_file(file, file_path_with_not_extension)
-        if os.path.exists(file_path_with_not_extension) or file_extension == GZ_EXTENSION:
+        elif file_extension == '':
+            decompress_logs(file_path_with_not_extension)
+        if (os.path.exists(file_path_with_not_extension) and file_extension != '') or file_extension == GZ_EXTENSION:
             os.remove(file)

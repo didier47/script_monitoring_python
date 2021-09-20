@@ -14,6 +14,7 @@ LOG_PATH_FOLDER = r'.\LOGS_CMB'
 ALL_FILES_CHARACTERS = '/*'
 LIST_REQUEST = [
     'validarTarjetaVirtual',
+    'validarHuella',
     'iniciarSesion',
     'obtenerServicios',
     'obtenerCompanias',
@@ -26,6 +27,7 @@ TOTAL_TAG = 'total'
 APPROVED_TAG = 'aprobadas'
 ERRORS_TAG = 'errores'
 INCONCLUSIVE_TAG = 'inconclusas'
+TIMES_OUT_TAG = 'fuera_de_tiempo'
 
 
 def search_file(path):
